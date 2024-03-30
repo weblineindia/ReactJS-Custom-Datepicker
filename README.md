@@ -48,21 +48,23 @@ import React ,{ Component } from 'react';
 import Calendar from 'react-weblineindia-date-picker'
 
 class Test extends Component {
-    constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
-      value:''
+      date1: null,
     };
-    render(){
+  }
+
+  render() {
     return (
       <div>
-        <Calendar
-        value={this.state.value}
-        showIcon={true}
-        />
+        <Calendar id="basic" value={this.state.date1} onChange={(e) => this.setState({ date1: e.value })} />
       </div>
-    )}
+    );
+  }
 }
+
+export default Test;
 ```
 ## Available Props
 | Prop | Type | default | Description |

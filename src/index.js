@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
@@ -13,6 +12,8 @@ import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import moment from 'moment'
 import 'moment/min/locales'
+import './Calendar.css';
+
 class Calendar extends Component {
   constructor(props) {
     super(props)
@@ -142,28 +143,6 @@ class Calendar extends Component {
       if (Array.isArray(prevPropValue)) {
         prevPropValue = prevPropValue[0]
       }
-
-      if (
-        (!prevPropValue && propValue) ||
-        (propValue &&
-          propValue instanceof Date &&
-          propValue.getTime() !== prevPropValue.getTime())
-      ) {
-        const viewDate = this.props.viewDate && this.isValidDate(this.props.viewDate)
-            ? this.props.viewDate
-            : propValue && this.isValidDate(propValue)
-            ? propValue
-            : new Date()
-
-        // this.setState(
-        //   {
-        //     viewDate,
-        //   },
-        //   () => {
-        //     this.viewStateChanged = true;
-        //   }
-        // );
-      }
     }
 
     if (this.panel) {
@@ -258,16 +237,16 @@ class Calendar extends Component {
       return
     }
     this.isKeydown = false
-    let rawValue = event.target.value
+    const rawValue = event.target.value
 
     try {
-      let value = this.parseValueFromString(rawValue)
+      const value = this.parseValueFromString(rawValue)
       if (this.isValidSelection(value)) {
         this.updateModel(event, value)
         this.updateViewDate(event, value.length ? value[0] : value)
       }
     } catch (err) {
-      let value = this.props.keepInvalid ? rawValue : null
+      const value = this.props.keepInvalid ? rawValue : null
       this.updateModel(event, value)
     }
 
@@ -303,7 +282,7 @@ class Calendar extends Component {
       )
     ) {
       if (this.isRangeSelection()) {
-        isValid = value.length > 1 && value[1] > value[0] ? true : false
+        isValid = !!(value.length > 1 && value[1] > value[0])
       }
     }
     return isValid;
@@ -343,13 +322,13 @@ class Calendar extends Component {
 
   trapFocus(event) {
     event.preventDefault();
-    let focusableElements = DomHandler.getFocusableElements(this.panel)
+    const focusableElements = DomHandler.getFocusableElements(this.panel)
 
     if (focusableElements && focusableElements.length > 0) {
       if (!document.activeElement) {
         focusableElements[0].focus();
       } else {
-        let focusedIndex = focusableElements.indexOf(document.activeElement)
+        const focusedIndex = focusableElements.indexOf(document.activeElement)
 
         if (event.shiftKey) {
           if (focusedIndex === -1 || focusedIndex === 0)
@@ -378,7 +357,7 @@ class Calendar extends Component {
         else DomHandler.findSingle(this.panel, ".p-datepicker-next").focus();
       } else {
         if (this.navigation.backward) {
-          let cells = DomHandler.find(
+          const cells = DomHandler.find(
             this.panel,
             ".p-datepicker-calendar td span:not(.p-disabled)"
           );
@@ -405,11 +384,11 @@ class Calendar extends Component {
   initFocusableCell() {
     let cell;
     if (this.view === "month") {
-      let cells = DomHandler.find(
+      const cells = DomHandler.find(
         this.panel,
         ".p-monthpicker .p-monthpicker-month"
       );
-      let selectedCell = DomHandler.findSingle(
+      const selectedCell = DomHandler.findSingle(
         this.panel,
         ".p-monthpicker .p-monthpicker-month.p-highlight"
       );
@@ -418,7 +397,7 @@ class Calendar extends Component {
     } else {
       cell = DomHandler.findSingle(this.panel, "span.p-highlight");
       if (!cell) {
-        let todayCell = DomHandler.findSingle(
+        const todayCell = DomHandler.findSingle(
           this.panel,
           "td.p-datepicker-today span:not(.p-disabled)"
         );
@@ -442,7 +421,7 @@ class Calendar extends Component {
       return;
     }
 
-    let newViewDate = new Date(this.getViewDate().getTime());
+    const newViewDate = new Date(this.getViewDate().getTime());
     newViewDate.setDate(1);
 
     if (this.props.view === "date") {
@@ -453,7 +432,7 @@ class Calendar extends Component {
         newViewDate.setMonth(newViewDate.getMonth() - 1);
       }
     } else if (this.props.view === "month") {
-      let currentYear = newViewDate.getFullYear();
+      const currentYear = newViewDate.getFullYear();
       let newYear = currentYear - 1;
 
       if (this.props.yearNavigator) {
@@ -478,7 +457,7 @@ class Calendar extends Component {
       return;
     }
 
-    let newViewDate = new Date(this.getViewDate().getTime());
+    const newViewDate = new Date(this.getViewDate().getTime());
     newViewDate.setDate(1);
 
     if (this.props.view === "date") {
@@ -489,7 +468,7 @@ class Calendar extends Component {
         newViewDate.setMonth(newViewDate.getMonth() + 1);
       }
     } else if (this.props.view === "month") {
-      let currentYear = newViewDate.getFullYear();
+      const currentYear = newViewDate.getFullYear();
       let newYear = currentYear + 1;
 
       if (this.props.yearNavigator) {
@@ -510,7 +489,7 @@ class Calendar extends Component {
 
   onMonthDropdownChange(event) {
     const currentViewDate = this.getViewDate();
-    let newViewDate = new Date(currentViewDate.getTime());
+    const newViewDate = new Date(currentViewDate.getTime());
     newViewDate.setMonth(parseInt(event.target.value, 10));
 
     this.updateViewDate(event, newViewDate);
@@ -518,7 +497,7 @@ class Calendar extends Component {
 
   onYearDropdownChange(event) {
     const currentViewDate = this.getViewDate();
-    let newViewDate = new Date(currentViewDate.getTime());
+    const newViewDate = new Date(currentViewDate.getTime());
     newViewDate.setFullYear(parseInt(event.target.value, 10));
 
     this.updateViewDate(event, newViewDate);
@@ -580,7 +559,7 @@ class Calendar extends Component {
   repeat(event, interval, type, direction) {
     event.persist();
 
-    let i = interval || 500;
+    const i = interval || 500;
 
     this.clearTimePickerTimer();
     this.timePickerTimer = setTimeout(() => {
@@ -1110,7 +1089,7 @@ class Calendar extends Component {
 
   validateHour(hour, value) {
     let valid = true;
-    let valueDateString = value ? value.toDateString() : null;
+    const valueDateString = value ? value.toDateString() : null;
 
     if (
       this.props.minDate &&
@@ -1137,7 +1116,7 @@ class Calendar extends Component {
 
   validateMinute(minute, value) {
     let valid = true;
-    let valueDateString = value ? value.toDateString() : null;
+    const valueDateString = value ? value.toDateString() : null;
 
     if (
       this.props.minDate &&
@@ -1168,7 +1147,7 @@ class Calendar extends Component {
 
   validateSecond(second, value) {
     let valid = true;
-    let valueDateString = value ? value.toDateString() : null;
+    const valueDateString = value ? value.toDateString() : null;
 
     if (
       this.props.minDate &&
@@ -1205,7 +1184,7 @@ class Calendar extends Component {
 
   validateMillisecond(millisecond, value) {
     let valid = true;
-    let valueDateString = value ? value.toDateString() : null;
+    const valueDateString = value ? value.toDateString() : null;
 
     if (
       this.props.minDate &&
@@ -1243,7 +1222,7 @@ class Calendar extends Component {
   }
 
   updateTime(event, hour, minute, second, millisecond) {
-    let newDateTime =
+    const newDateTime =
       this.props.value && this.props.value instanceof Date
         ? new Date(this.props.value)
         : new Date();
@@ -1280,8 +1259,8 @@ class Calendar extends Component {
     }
 
     if (this.props.monthNavigator && this.props.view !== "month") {
-      let viewMonth = value.getMonth();
-      let viewMonthWithMinMax = parseInt(
+      const viewMonth = value.getMonth();
+      const viewMonthWithMinMax = parseInt(
         (this.isInMinYear(value) &&
           Math.max(this.props.minDate.getMonth(), viewMonth).toString()) ||
           (this.isInMaxYear(value) &&
@@ -1310,13 +1289,13 @@ class Calendar extends Component {
     const cell = cellContent.parentElement;
 
     switch (event.which) {
-      //down arrow
+      // down arrow
       case 40: {
         cellContent.tabIndex = "-1";
-        let cellIndex = DomHandler.index(cell);
-        let nextRow = cell.parentElement.nextElementSibling;
+        const cellIndex = DomHandler.index(cell);
+        const nextRow = cell.parentElement.nextElementSibling;
         if (nextRow) {
-          let focusCell = nextRow.children[cellIndex].children[0];
+          const focusCell = nextRow.children[cellIndex].children[0];
           if (DomHandler.hasClass(focusCell, "p-disabled")) {
             this.navigation = { backward: false };
             this.navForward(event);
@@ -1332,13 +1311,13 @@ class Calendar extends Component {
         break;
       }
 
-      //up arrow
+      // up arrow
       case 38: {
         cellContent.tabIndex = "-1";
-        let cellIndex = DomHandler.index(cell);
-        let prevRow = cell.parentElement.previousElementSibling;
+        const cellIndex = DomHandler.index(cell);
+        const prevRow = cell.parentElement.previousElementSibling;
         if (prevRow) {
-          let focusCell = prevRow.children[cellIndex].children[0];
+          const focusCell = prevRow.children[cellIndex].children[0];
           if (DomHandler.hasClass(focusCell, "p-disabled")) {
             this.navigation = { backward: true };
             this.navBackward(event);
@@ -1354,12 +1333,12 @@ class Calendar extends Component {
         break;
       }
 
-      //left arrow
+      // left arrow
       case 37: {
         cellContent.tabIndex = "-1";
-        let prevCell = cell.previousElementSibling;
+        const prevCell = cell.previousElementSibling;
         if (prevCell) {
-          let focusCell = prevCell.children[0];
+          const focusCell = prevCell.children[0];
           if (DomHandler.hasClass(focusCell, "p-disabled")) {
             this.navigateToMonth(true, groupIndex, event);
           } else {
@@ -1373,12 +1352,12 @@ class Calendar extends Component {
         break;
       }
 
-      //right arrow
+      // right arrow
       case 39: {
         cellContent.tabIndex = "-1";
-        let nextCell = cell.nextElementSibling;
+        const nextCell = cell.nextElementSibling;
         if (nextCell) {
-          let focusCell = nextCell.children[0];
+          const focusCell = nextCell.children[0];
           if (DomHandler.hasClass(focusCell, "p-disabled")) {
             this.navigateToMonth(false, groupIndex, event);
           } else {
@@ -1392,28 +1371,28 @@ class Calendar extends Component {
         break;
       }
 
-      //enter
+      // enter
       case 13: {
         this.onDateSelect(event, date);
         event.preventDefault();
         break;
       }
 
-      //escape
+      // escape
       case 27: {
         this.hideOverlay();
         event.preventDefault();
         break;
       }
 
-      //tab
+      // tab
       case 9: {
         this.trapFocus(event);
         break;
       }
 
       default:
-        //no op
+        // no op
         break;
     }
   }
@@ -1424,12 +1403,12 @@ class Calendar extends Component {
         this.navigation = { backward: true };
         this.navBackward(event);
       } else {
-        let prevMonthContainer = this.panel.children[groupIndex - 1];
-        let cells = DomHandler.find(
+        const prevMonthContainer = this.panel.children[groupIndex - 1];
+        const cells = DomHandler.find(
           prevMonthContainer,
           ".p-datepicker-calendar td span:not(.p-disabled)"
         );
-        let focusCell = cells[cells.length - 1];
+        const focusCell = cells[cells.length - 1];
         focusCell.tabIndex = "0";
         focusCell.focus();
       }
@@ -1441,8 +1420,8 @@ class Calendar extends Component {
         this.navigation = { backward: false };
         this.navForward(event);
       } else {
-        let nextMonthContainer = this.panel.children[groupIndex + 1];
-        let focusCell = DomHandler.findSingle(
+        const nextMonthContainer = this.panel.children[groupIndex + 1];
+        const focusCell = DomHandler.findSingle(
           nextMonthContainer,
           ".p-datepicker-calendar td span:not(.p-disabled)"
         );
@@ -1470,10 +1449,10 @@ class Calendar extends Component {
         break
       }
 
-      //left arrow
+      // left arrow
       case 37: {
         cell.tabIndex = "-1";
-        let prevCell = cell.previousElementSibling;
+        const prevCell = cell.previousElementSibling;
         if (prevCell) {
           prevCell.tabIndex = "0";
           prevCell.focus();
@@ -1482,10 +1461,10 @@ class Calendar extends Component {
         break;
       }
 
-      //right arrow
+      // right arrow
       case 39: {
         cell.tabIndex = "-1";
-        let nextCell = cell.nextElementSibling;
+        const nextCell = cell.nextElementSibling;
         if (nextCell) {
           nextCell.tabIndex = "0";
           nextCell.focus();
@@ -1494,28 +1473,28 @@ class Calendar extends Component {
         break;
       }
 
-      //enter
+      // enter
       case 13: {
         this.onMonthSelect(event, index);
         event.preventDefault();
         break;
       }
 
-      //escape
+      // escape
       case 27: {
         this.hideOverlay();
         event.preventDefault();
         break;
       }
 
-      //tab
+      // tab
       case 9: {
         this.trapFocus(event);
         break;
       }
 
       default:
-        //no op
+        // no op
         break;
     }
   }
@@ -1534,7 +1513,7 @@ class Calendar extends Component {
 
     if (this.isMultipleSelection()) {
       if (this.isSelected(dateMeta)) {
-        let value = this.props.value.filter((date, i) => {
+        const value = this.props.value.filter((date, i) => {
           return !this.isDateEquals(date, dateMeta);
         });
         this.updateModel(event, value);
@@ -1777,10 +1756,10 @@ class Calendar extends Component {
       document.body.removeChild(this.mask);
       this.mask = null;
 
-      let bodyChildren = document.body.children;
+      const bodyChildren = document.body.children;
       let hasBlockerMasks;
       for (let i = 0; i < bodyChildren.length; i++) {
-        let bodyChild = bodyChildren[i];
+        const bodyChild = bodyChildren[i];
         if (DomHandler.hasClass(bodyChild, "p-datepicker-mask-scrollblocker")) {
           hasBlockerMasks = true;
           break;
@@ -1796,12 +1775,12 @@ class Calendar extends Component {
   }
 
   getFirstDayOfMonthIndex(month, year) {
-    let day = new Date();
+    const day = new Date();
     day.setDate(1);
     day.setMonth(month);
     day.setFullYear(year);
 
-    let dayIndex = day.getDay() + this.getSundayIndex();
+    const dayIndex = day.getDay() + this.getSundayIndex();
     return dayIndex >= 7 ? dayIndex - 7 : dayIndex;
   }
 
@@ -1810,7 +1789,7 @@ class Calendar extends Component {
   }
 
   getDaysCountInPrevMonth(month, year) {
-    let prev = this.getPreviousMonthAndYear(month, year);
+    const prev = this.getPreviousMonthAndYear(month, year);
     return this.getDaysCountInMonth(prev.month, prev.year);
   }
 
@@ -1859,7 +1838,7 @@ class Calendar extends Component {
   }
 
   createWeekDays() {
-    let weekDays = [];
+    const weekDays = [];
     let dayIndex = this.state.localeData.firstDayOfWeek;
     for (let i = 0; i < 7; i++) {
       weekDays.push(this.state.localeData.dayNamesMin[dayIndex]);
@@ -1870,7 +1849,7 @@ class Calendar extends Component {
   }
 
   createMonths(month, year) {
-    let months = [];
+    const months = [];
     for (let i = 0; i < this.props.numberOfMonths; i++) {
       let m = month + i;
       let y = year;
@@ -1886,17 +1865,17 @@ class Calendar extends Component {
   }
 
   createMonth(month, year) {
-    let dates = [];
-    let firstDay = this.getFirstDayOfMonthIndex(month, year);
-    let daysLength = this.getDaysCountInMonth(month, year);
-    let prevMonthDaysLength = this.getDaysCountInPrevMonth(month, year);
+    const dates = [];
+    const firstDay = this.getFirstDayOfMonthIndex(month, year);
+    const daysLength = this.getDaysCountInMonth(month, year);
+    const prevMonthDaysLength = this.getDaysCountInPrevMonth(month, year);
     let dayNo = 1;
-    let today = new Date();
-    let weekNumbers = [];
-    let monthRows = Math.ceil((daysLength + firstDay) / 7);
+    const today = new Date();
+    const weekNumbers = [];
+    const monthRows = Math.ceil((daysLength + firstDay) / 7);
 
     for (let i = 0; i < monthRows; i++) {
-      let week = [];
+      const week = [];
 
       if (i === 0) {
         for (
@@ -1904,7 +1883,7 @@ class Calendar extends Component {
           j <= prevMonthDaysLength;
           j++
         ) {
-          let prev = this.getPreviousMonthAndYear(month, year);
+          const prev = this.getPreviousMonthAndYear(month, year);
           week.push({
             day: j,
             month: prev.month,
@@ -1915,7 +1894,7 @@ class Calendar extends Component {
           });
         }
 
-        let remainingDaysLength = 7 - week.length;
+        const remainingDaysLength = 7 - week.length;
         for (let j = 0; j < remainingDaysLength; j++) {
           week.push({
             day: dayNo,
@@ -1929,7 +1908,7 @@ class Calendar extends Component {
       } else {
         for (let j = 0; j < 7; j++) {
           if (dayNo > daysLength) {
-            let next = this.getNextMonthAndYear(month, year);
+            const next = this.getNextMonthAndYear(month, year);
             week.push({
               day: dayNo - daysLength,
               month: next.month,
@@ -1980,9 +1959,9 @@ class Calendar extends Component {
   }
 
   getWeekNumber(date) {
-    let checkDate = new Date(date.getTime());
+    const checkDate = new Date(date.getTime());
     checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
-    let time = checkDate.getTime();
+    const time = checkDate.getTime();
     checkDate.setMonth(0);
     checkDate.setDate(1);
     return (
@@ -2099,7 +2078,7 @@ class Calendar extends Component {
         return this.isDateEquals(this.props.value, dateMeta);
       } else if (this.isMultipleSelection()) {
         let selected = false;
-        for (let date of this.props.value) {
+        for (const date of this.props.value) {
           selected = this.isDateEquals(date, dateMeta);
           if (selected) {
             break;
@@ -2150,9 +2129,9 @@ class Calendar extends Component {
   }
 
   isDateBetween(start, end, dateMeta) {
-    let between = false;
+    const between = false;
     if (start && end) {
-      let date = new Date(dateMeta.year, dateMeta.month, dateMeta.day);
+      const date = new Date(dateMeta.year, dateMeta.month, dateMeta.day);
       return (
         start.getTime() <= date.getTime() && end.getTime() >= date.getTime()
       );
@@ -2184,7 +2163,7 @@ class Calendar extends Component {
   isDateDisabled(day, month, year) {
     if (this.props.disabledDates) {
       for (let i = 0; i < this.props.disabledDates.length; i++) {
-        let disabledDate = this.props.disabledDates[i];
+        const disabledDate = this.props.disabledDates[i];
 
         if (
           disabledDate.getFullYear() === year &&
@@ -2201,8 +2180,8 @@ class Calendar extends Component {
 
   isDayDisabled(day, month, year) {
     if (this.props.disabledDays) {
-      let weekday = new Date(year, month, day);
-      let weekdayNumber = weekday.getDay();
+      const weekday = new Date(year, month, day);
+      const weekdayNumber = weekday.getDay();
 
       return this.props.disabledDays.indexOf(weekdayNumber) !== -1;
     }
@@ -2225,8 +2204,8 @@ class Calendar extends Component {
             : "";
         } else if (this.isMultipleSelection()) {
           for (let i = 0; i < value.length; i++) {
-            let selectedValue = value[i];
-            let dateAsString = this.isValidDate(selectedValue)
+            const selectedValue = value[i];
+            const dateAsString = this.isValidDate(selectedValue)
               ? this.formatDateTime(selectedValue)
               : "";
             formattedValue += dateAsString;
@@ -2236,8 +2215,8 @@ class Calendar extends Component {
           }
         } else if (this.isRangeSelection()) {
           if (value && value.length) {
-            let startDate = value[0];
-            let endDate = value[1];
+            const startDate = value[0];
+            const endDate = value[1];
 
             formattedValue = this.isValidDate(startDate)
               ? this.formatDateTime(startDate)
@@ -2279,8 +2258,8 @@ class Calendar extends Component {
           iFormat++;
         }
         return matches;
-      },
-      formatNumber = (match, value, len) => {
+      };
+      const formatNumber = (match, value, len) => {
         let num = "" + value;
         if (lookAhead(match)) {
           while (num.length < len) {
@@ -2288,8 +2267,8 @@ class Calendar extends Component {
           }
         }
         return num;
-      },
-      formatName = (match, value, shortNames, longNames) => {
+      };
+      const formatName = (match, value, shortNames, longNames) => {
         return lookAhead(match) ? longNames[value] : shortNames[value];
       };
     let output = "";
@@ -2376,8 +2355,8 @@ class Calendar extends Component {
     }
 
     let output = "";
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
     output += hours < 10 ? "0" + hours : hours;
     
     output += ":";
@@ -2395,13 +2374,13 @@ class Calendar extends Component {
     if (this.isSingleSelection()) {
       value = this.parseDateTime(text);
     } else if (this.isMultipleSelection()) {
-      let tokens = text.split(",");
+      const tokens = text.split(",");
       value = [];
-      for (let token of tokens) {
+      for (const token of tokens) {
         value.push(this.parseDateTime(token.trim()));
       }
     } else if (this.isRangeSelection()) {
-      let tokens = text.split(" - ");
+      const tokens = text.split(" - ");
       value = [];
       for (let i = 0; i < tokens.length; i++) {
         value[i] = this.parseDateTime(tokens[i].trim());
@@ -2412,13 +2391,12 @@ class Calendar extends Component {
   }
 
   parseDateTime(text) {
-    let date;
-    date = this.parseDate(text, this.props.dateFormat);
+    const date = this.parseDate(text, this.props.dateFormat);
     return date;
   }
 
   populateTime(value, timeString, ampm) {
-    let time = this.parseTime(timeString, ampm);
+    const time = this.parseTime(timeString, ampm);
     value.setHours(time.hour);
     value.setMinutes(time.minute);
     value.setSeconds(time.second);
@@ -2426,7 +2404,7 @@ class Calendar extends Component {
   }
 
   parseTime(value, ampm) {
-    let tokens = value.split(":");
+    const tokens = value.split(":");
     if (
       tokens[0].length !== 2 ||
       tokens[1].length !== 2 ||
@@ -2435,10 +2413,10 @@ class Calendar extends Component {
       throw new Error("Invalid time");
     }
 
-    let h = parseInt(tokens[0], 10);
-    let m = parseInt(tokens[1], 10);
-    let s =  null;
-    let ms = null;
+    const h = parseInt(tokens[0], 10);
+    const m = parseInt(tokens[1], 10);
+    const s =  null;
+    const ms = null;
 
     if (
       isNaN(h) ||
@@ -2461,32 +2439,32 @@ class Calendar extends Component {
       return null;
     }
 
-    let iFormat,
-      dim,
-      extra,
-      iValue = 0,
-      shortYearCutoff =
+    let iFormat;
+      let dim;
+      let extra;
+      let iValue = 0;
+      const shortYearCutoff =
         typeof this.props.shortYearCutoff !== "string"
           ? this.props.shortYearCutoff
           : (new Date().getFullYear() % 100) +
-            parseInt(this.props.shortYearCutoff, 10),
-      year = -1,
-      month = -1,
-      day = -1,
-      doy = -1,
-      literal = false,
-      date,
-      lookAhead = (match) => {
-        let matches =
+            parseInt(this.props.shortYearCutoff, 10);
+      let year = -1;
+      let month = -1;
+      let day = -1;
+      let doy = -1;
+      let literal = false;
+      let date;
+      const lookAhead = (match) => {
+        const matches =
           iFormat + 1 < format.length && format.charAt(iFormat + 1) === match;
         if (matches) {
           iFormat++;
         }
         return matches;
-      },
-      getNumber = (match) => {
-        let isDoubled = lookAhead(match),
-          size =
+      };
+      const getNumber = (match) => {
+        const isDoubled = lookAhead(match);
+          const size =
             match === "@"
               ? 14
               : match === "!"
@@ -2495,20 +2473,20 @@ class Calendar extends Component {
               ? 4
               : match === "o"
               ? 3
-              : 2,
-          minSize = match === "y" ? size : 1,
-          digits = new RegExp("^\\d{" + minSize + "," + size + "}"),
-          num = value.substring(iValue).match(digits);
+              : 2;
+          const minSize = match === "y" ? size : 1;
+          const digits = new RegExp("^\\d{" + minSize + "," + size + "}");
+          const num = value.substring(iValue).match(digits);
         if (!num) {
           throw new Error("Missing number at position " + iValue);
         }
         iValue += num[0].length;
         return parseInt(num[0], 10);
-      },
-      getName = (match, shortNames, longNames) => {
+      };
+      const getName = (match, shortNames, longNames) => {
         let index = -1;
-        let arr = lookAhead(match) ? longNames : shortNames;
-        let names = [];
+        const arr = lookAhead(match) ? longNames : shortNames;
+        const names = [];
 
         for (let i = 0; i < arr.length; i++) {
           names.push([i, arr[i]]);
@@ -2518,7 +2496,7 @@ class Calendar extends Component {
         });
 
         for (let i = 0; i < names.length; i++) {
-          let name = names[i][1];
+          const name = names[i][1];
           if (
             value.substr(iValue, name.length).toLowerCase() ===
             name.toLowerCase()
@@ -2534,8 +2512,8 @@ class Calendar extends Component {
         } else {
           throw new Error("Unknown name at position " + iValue);
         }
-      },
-      checkLiteral = () => {
+      };
+      const checkLiteral = () => {
         if (value.charAt(iValue) !== format.charAt(iFormat)) {
           throw new Error("Unexpected literal at position " + iValue);
         }
@@ -2655,7 +2633,7 @@ class Calendar extends Component {
         onClick={this.onPrevButtonClick}
         onKeyDown={(e) => this.onContainerButtonKeydown(e)}
       >
-        <span className="p-datepicker-prev-icon pi pi-chevron-left"></span>
+        <span className="p-datepicker-prev-icon pi pi-chevron-left" />
       </button>
     );
   }
@@ -2668,7 +2646,7 @@ class Calendar extends Component {
         onClick={this.onNextButtonClick}
         onKeyDown={(e) => this.onContainerButtonKeydown(e)}
       >
-        <span className="p-datepicker-next-icon pi pi-chevron-right"></span>
+        <span className="p-datepicker-next-icon pi pi-chevron-right" />
       </button>
     );
   }
@@ -2689,8 +2667,8 @@ class Calendar extends Component {
 
   renderTitleMonthElement(month) {
     if (this.props.monthNavigator && this.props.view !== "month") {
-      let viewDate = this.getViewDate();
-      let viewMonth = viewDate.getMonth();
+      const viewDate = this.getViewDate();
+      const viewMonth = viewDate.getMonth();
 
       return (
         <select
@@ -2726,7 +2704,7 @@ class Calendar extends Component {
 
   renderTitleYearElement(year) {
     if (this.props.yearNavigator) {
-      let yearOptions = [];
+      const yearOptions = [];
       const years = this.props.yearRange.split(":");
       const yearStart = parseInt(years[0], 10);
       const yearEnd = parseInt(years[1], 10);
@@ -2735,8 +2713,8 @@ class Calendar extends Component {
         yearOptions.push(i);
       }
 
-      let viewDate = this.getViewDate();
-      let viewYear = viewDate.getFullYear();
+      const viewDate = this.getViewDate();
+      const viewYear = viewDate.getFullYear();
 
       return (
         <select
@@ -2789,10 +2767,10 @@ class Calendar extends Component {
       const weekHeader = (
         <th
           scope="col"
-          key={"wn"}
+          key="wn"
           className="p-datepicker-weekheader p-disabled"
         >
-          <span>{this.state.localeData["weekHeader"]}</span>
+          <span>{this.state.localeData.weekHeader}</span>
         </th>
       );
 
@@ -2922,7 +2900,7 @@ class Calendar extends Component {
   }
 
   renderDateView() {
-    let viewDate = this.getViewDate();
+    const viewDate = this.getViewDate();
     const monthsMetaData = this.createMonths(
       viewDate.getMonth(),
       viewDate.getFullYear()
@@ -2951,7 +2929,7 @@ class Calendar extends Component {
   }
 
   renderMonthViewMonths() {
-    let months = [];
+    const months = [];
     for (let i = 0; i <= 11; i++) {
       months.push(this.renderMonthViewMonth(i));
     }
@@ -2966,7 +2944,7 @@ class Calendar extends Component {
       this.getViewDate().getFullYear()
     );
     const months = this.renderMonthViewMonths();
-
+      
     return (
       <React.Fragment>
         <div className="p-datepicker-header">
