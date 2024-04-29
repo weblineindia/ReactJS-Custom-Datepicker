@@ -2294,19 +2294,6 @@ var Calendar = /*#__PURE__*/function (_Component) {
     if (prevProps.tooltip !== this.props.tooltip) {
       if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
     }
-    if (!this.props.onViewDateChange && !this.viewStateChanged) {
-      var propValue = this.props.value;
-      if (Array.isArray(propValue)) {
-        propValue = propValue[0];
-      }
-      var prevPropValue = prevProps.value;
-      if (Array.isArray(prevPropValue)) {
-        prevPropValue = prevPropValue[0];
-      }
-      if (!prevPropValue && propValue || propValue && propValue instanceof Date && propValue.getTime() !== prevPropValue.getTime()) {
-        var viewDate = this.props.viewDate && this.isValidDate(this.props.viewDate) ? this.props.viewDate : propValue && this.isValidDate(propValue) ? propValue : new Date();
-      }
-    }
     if (this.panel) {
       this.updateFocus();
     }
@@ -2405,7 +2392,7 @@ var Calendar = /*#__PURE__*/function (_Component) {
       return _this2.isSelectable(v.getDate(), v.getMonth(), v.getFullYear(), false) && _this2.isSelectableTime(value);
     })) {
       if (this.isRangeSelection()) {
-        isValid = value.length > 1 && value[1] > value[0] ? true : false;
+        isValid = !!(value.length > 1 && value[1] > value[0]);
       }
     }
     return isValid;
@@ -3698,24 +3685,24 @@ var Calendar = /*#__PURE__*/function (_Component) {
     }
     var iFormat;
     var lookAhead = function lookAhead(match) {
-        var matches = iFormat + 1 < format.length && format.charAt(iFormat + 1) === match;
-        if (matches) {
-          iFormat++;
+      var matches = iFormat + 1 < format.length && format.charAt(iFormat + 1) === match;
+      if (matches) {
+        iFormat++;
+      }
+      return matches;
+    };
+    var formatNumber = function formatNumber(match, value, len) {
+      var num = "" + value;
+      if (lookAhead(match)) {
+        while (num.length < len) {
+          num = "0" + num;
         }
-        return matches;
-      },
-      formatNumber = function formatNumber(match, value, len) {
-        var num = "" + value;
-        if (lookAhead(match)) {
-          while (num.length < len) {
-            num = "0" + num;
-          }
-        }
-        return num;
-      },
-      formatName = function formatName(match, value, shortNames, longNames) {
-        return lookAhead(match) ? longNames[value] : shortNames[value];
-      };
+      }
+      return num;
+    };
+    var formatName = function formatName(match, value, shortNames, longNames) {
+      return lookAhead(match) ? longNames[value] : shortNames[value];
+    };
     var output = "";
     var literal = false;
     if (date) {
@@ -3803,8 +3790,7 @@ var Calendar = /*#__PURE__*/function (_Component) {
     return value;
   };
   _proto.parseDateTime = function parseDateTime(text) {
-    var date;
-    date = this.parseDate(text, this.props.dateFormat);
+    var date = this.parseDate(text, this.props.dateFormat);
     return date;
   };
   _proto.populateTime = function populateTime(value, timeString, ampm) {
@@ -3840,66 +3826,66 @@ var Calendar = /*#__PURE__*/function (_Component) {
     if (value === "") {
       return null;
     }
-    var iFormat,
-      dim,
-      extra,
-      iValue = 0,
-      shortYearCutoff = typeof this.props.shortYearCutoff !== "string" ? this.props.shortYearCutoff : new Date().getFullYear() % 100 + parseInt(this.props.shortYearCutoff, 10),
-      year = -1,
-      month = -1,
-      day = -1,
-      doy = -1,
-      literal = false,
-      date,
-      lookAhead = function lookAhead(match) {
-        var matches = iFormat + 1 < format.length && format.charAt(iFormat + 1) === match;
-        if (matches) {
-          iFormat++;
+    var iFormat;
+    var dim;
+    var extra;
+    var iValue = 0;
+    var shortYearCutoff = typeof this.props.shortYearCutoff !== "string" ? this.props.shortYearCutoff : new Date().getFullYear() % 100 + parseInt(this.props.shortYearCutoff, 10);
+    var year = -1;
+    var month = -1;
+    var day = -1;
+    var doy = -1;
+    var literal = false;
+    var date;
+    var lookAhead = function lookAhead(match) {
+      var matches = iFormat + 1 < format.length && format.charAt(iFormat + 1) === match;
+      if (matches) {
+        iFormat++;
+      }
+      return matches;
+    };
+    var getNumber = function getNumber(match) {
+      var isDoubled = lookAhead(match);
+      var size = match === "@" ? 14 : match === "!" ? 20 : match === "y" && isDoubled ? 4 : match === "o" ? 3 : 2;
+      var minSize = match === "y" ? size : 1;
+      var digits = new RegExp("^\\d{" + minSize + "," + size + "}");
+      var num = value.substring(iValue).match(digits);
+      if (!num) {
+        throw new Error("Missing number at position " + iValue);
+      }
+      iValue += num[0].length;
+      return parseInt(num[0], 10);
+    };
+    var getName = function getName(match, shortNames, longNames) {
+      var index = -1;
+      var arr = lookAhead(match) ? longNames : shortNames;
+      var names = [];
+      for (var i = 0; i < arr.length; i++) {
+        names.push([i, arr[i]]);
+      }
+      names.sort(function (a, b) {
+        return -(a[1].length - b[1].length);
+      });
+      for (var _i = 0; _i < names.length; _i++) {
+        var name = names[_i][1];
+        if (value.substr(iValue, name.length).toLowerCase() === name.toLowerCase()) {
+          index = names[_i][0];
+          iValue += name.length;
+          break;
         }
-        return matches;
-      },
-      getNumber = function getNumber(match) {
-        var isDoubled = lookAhead(match),
-          size = match === "@" ? 14 : match === "!" ? 20 : match === "y" && isDoubled ? 4 : match === "o" ? 3 : 2,
-          minSize = match === "y" ? size : 1,
-          digits = new RegExp("^\\d{" + minSize + "," + size + "}"),
-          num = value.substring(iValue).match(digits);
-        if (!num) {
-          throw new Error("Missing number at position " + iValue);
-        }
-        iValue += num[0].length;
-        return parseInt(num[0], 10);
-      },
-      getName = function getName(match, shortNames, longNames) {
-        var index = -1;
-        var arr = lookAhead(match) ? longNames : shortNames;
-        var names = [];
-        for (var i = 0; i < arr.length; i++) {
-          names.push([i, arr[i]]);
-        }
-        names.sort(function (a, b) {
-          return -(a[1].length - b[1].length);
-        });
-        for (var _i = 0; _i < names.length; _i++) {
-          var name = names[_i][1];
-          if (value.substr(iValue, name.length).toLowerCase() === name.toLowerCase()) {
-            index = names[_i][0];
-            iValue += name.length;
-            break;
-          }
-        }
-        if (index !== -1) {
-          return index + 1;
-        } else {
-          throw new Error("Unknown name at position " + iValue);
-        }
-      },
-      checkLiteral = function checkLiteral() {
-        if (value.charAt(iValue) !== format.charAt(iFormat)) {
-          throw new Error("Unexpected literal at position " + iValue);
-        }
-        iValue++;
-      };
+      }
+      if (index !== -1) {
+        return index + 1;
+      } else {
+        throw new Error("Unknown name at position " + iValue);
+      }
+    };
+    var checkLiteral = function checkLiteral() {
+      if (value.charAt(iValue) !== format.charAt(iFormat)) {
+        throw new Error("Unexpected literal at position " + iValue);
+      }
+      iValue++;
+    };
     if (this.props.view === "month") {
       day = 1;
     }
@@ -4089,7 +4075,7 @@ var Calendar = /*#__PURE__*/function (_Component) {
         scope: "col",
         key: "wn",
         className: "p-datepicker-weekheader p-disabled"
-      }, /*#__PURE__*/React__default.createElement("span", null, this.state.localeData["weekHeader"]));
+      }, /*#__PURE__*/React__default.createElement("span", null, this.state.localeData.weekHeader));
       return [weekHeader].concat(dayNames);
     } else {
       return dayNames;

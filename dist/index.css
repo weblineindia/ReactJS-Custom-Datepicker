@@ -1,9 +1,9 @@
-.p-calendar {
+._FEqZ5 {
     position: relative;
     display: inline-block;
 }
 
-.p-calendar .p-calendar-button {
+._FEqZ5 ._BBqEO {
     position: absolute;
     height: 100%;
     border-top-left-radius: 0px;
@@ -12,46 +12,46 @@
     border-left: 0 none;
 }
 
-.p-calendar .p-calendar-button:enabled:hover,
-.p-calendar .p-calendar-button:focus {
+._FEqZ5 ._BBqEO:enabled:hover,
+._FEqZ5 ._BBqEO:focus {
     border-left: 0 none;
 }
 
-.p-calendar .p-datepicker {
+._FEqZ5 ._bMWAJ {
     min-width: 100%;
 }
 
 /* Fluid */
-.p-fluid .p-calendar {
+._2-SEM ._FEqZ5 {
     width: 100%;
 }
 
-.p-fluid .p-calendar-button {
+._2-SEM ._BBqEO {
     width: 2em;
 }
 
-.p-fluid .p-datepicker-buttonbar button {
+._2-SEM ._17Ent button {
     width: auto;
 }
 
-.p-fluid .p-calendar.p-calendar-w-btn .p-inputtext {
+._2-SEM ._FEqZ5._3_C0H ._10eAo {
     width: calc(100% - 2em);
 }
 
 /* Datepicker */
-.p-datepicker {
+._bMWAJ {
 	width: auto;
 	padding: .2em;
 	display: none;
     position: absolute;
 }
 
-.p-datepicker.p-datepicker-inline {
+._bMWAJ._37pKp {
     display: inline-block;
     position: static;
 }
 
-.p-datepicker .p-datepicker-group {
+._bMWAJ ._3GORf {
     border-left-width: 0;
     border-right-width: 0;
     border-top-width: 0;
@@ -59,12 +59,12 @@
 }
 
 /* Header */
-.p-datepicker .p-datepicker-header {
+._bMWAJ ._3VTu4 {
 	position: relative;
 	padding: .5em 0;
 }
-.p-datepicker .p-datepicker-prev,
-.p-datepicker .p-datepicker-next {
+._bMWAJ ._2M4uH,
+._bMWAJ ._1AWyU {
 	position: absolute;
 	top: .5em;
 	width: 1.8em;
@@ -72,15 +72,15 @@
     cursor: pointer;
 }
 
-.p-datepicker .p-datepicker-prev {
+._bMWAJ ._2M4uH {
 	left: .125em;
 }
-.p-datepicker .p-datepicker-next {
+._bMWAJ ._1AWyU {
 	right: .125em;
 }
 
-.p-datepicker .p-datepicker-prev span,
-.p-datepicker .p-datepicker-next span {
+._bMWAJ ._2M4uH span,
+._bMWAJ ._1AWyU span {
 	display: block;
 	position: absolute;
 	left: 50%;
@@ -89,25 +89,25 @@
     margin-left: -.5em;
 }
 
-.p-datepicker .p-datepicker-title {
+._bMWAJ ._3PWBO {
 	margin: 0 2.3em;
 	line-height: 1.8em;
 	text-align: center;
 }
-.p-datepicker .p-datepicker-title select {
+._bMWAJ ._3PWBO select {
 	font-size: 1em;
 	margin: .125em 0;
     vertical-align: middle;
 }
-.p-datepicker select.p-datepicker-month {
+._bMWAJ select._1G0fZ {
     margin-right: .25em;
 }
-.p-datepicker span.p-datepicker-year {
+._bMWAJ span._1eUF2 {
 	margin-left: .25em;
 }
 
 /* Multiple Month DatePicker */
-.p-datepicker-multiple-month .p-datepicker-group {
+._BT3iS ._3GORf {
     display: table-cell;
     border-left-width: 0;
     border-top-width: 0;
@@ -116,62 +116,56 @@
 }
 
 /* DatePicker Table */
-.p-datepicker table {
+._bMWAJ table {
 	width: 100%;
 	font-size: .9em;
 	border-collapse: collapse;
 	margin: 0 0 .4em;
 }
-.p-datepicker th {
+._bMWAJ th {
 	padding: .5em;
 	text-align: center;
 	font-weight: bold;
 	border: 0;
 }
-.p-datepicker td {
+._bMWAJ td {
 	border: 0;
 	padding: 0;
 }
-.p-datepicker td > span,
-.p-datepicker td > a {
+._bMWAJ td > span,
+._bMWAJ td > a {
 	display: block;
 	padding: .5em;
 	text-align: right;
 	text-decoration: none;
 }
 
-.p-datepicker td a {
+._bMWAJ td a {
     cursor: pointer;
 }
 
-.p-datepicker .p-datepicker-buttonbar,
-.p-datepicker .p-datepicker-footer {
+._bMWAJ ._17Ent,
+._bMWAJ ._AcVE6 {
 	padding: .5em;
 }
 
-.p-datepicker .p-datepicker-buttonbar:after {
+._bMWAJ ._17Ent:after {
     content: "";
     display: table;
     clear: both;
 }
 
-.p-datepicker .p-datepicker-buttonbar > button:last-child {
+._bMWAJ ._17Ent > button:last-child {
     float: right;
 }
 
-.p-calendar.p-calendar-w-btn input {
-    -moz-border-radius-topright: 0px;
-    -webkit-border-top-right-radius: 0px;
-    -khtml-border-top-right-radius: 0px;
+._FEqZ5._3_C0H input {
     border-top-right-radius: 0px;
-    -moz-border-radius-bottomright: 0px;
-    -webkit-border-bottom-right-radius: 0px;
-    -khtml-border-bottom-right-radius: 0px;
     border-bottom-right-radius: 0px;
 }
 
 /* Month Picker */
-.p-monthpicker .p-monthpicker-month {
+._1yhKs ._3bunm {
     width: 33.3%;
     display: inline-block;
     text-align: center;
@@ -179,12 +173,12 @@
     cursor: pointer;
 }
 
-.p-datepicker-monthpicker select.p-datepicker-year {
+._3AYtQ select._1eUF2 {
     width: auto;
 }
 
 /* Time Picker */
-.p-timepicker {
+._2t68- {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -193,7 +187,7 @@
     padding: .5em 0;
 }
 
-.p-timepicker > div {
+._2t68- > div {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -201,32 +195,32 @@
     min-width: 1.5em;
 }
 
-.p-timepicker > .p-minute-picker,
-.p-timepicker > .p-second-picker,
-.p-timepicker > .p-millisecond-picker {
+._2t68- > ._337ot,
+._2t68- > ._1gqCd,
+._2t68- > ._6Dyte {
     margin-left: 0;
 }
 
-.p-timepicker > .p-separator {
+._2t68- > ._3krjc {
     margin-left: 0px;
     min-width: .75em;
 }
 
-.p-timepicker > .p-separator .p-separator-spacer {
+._2t68- > ._3krjc ._17ERI {
     visibility: hidden;
     display: block;
 }
 
-.p-timepicker > .p-separator .p-separator-spacer:last-child {
+._2t68- > ._3krjc ._17ERI:last-child {
     margin-top: .3em;
 }
 
-.p-timepicker > div button {
+._2t68- > div button {
     display: block;
     cursor: pointer;
 }
 
-.p-timepicker > div button:last-child {
+._2t68- > div button:last-child {
     margin-top: .3em;
 }
 
@@ -235,8 +229,8 @@ input[type=text]::-ms-clear {
 }
 
 /* Touch UI */
-.p-datepicker-touch-ui,
-.p-calendar .p-datepicker-touch-ui {
+._19zMu,
+._FEqZ5 ._19zMu {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -244,43 +238,43 @@ input[type=text]::-ms-clear {
     transform: translate(-50%, -50%);
 }
 
-.p-datepicker-touch-ui.p-datepicker th {
+._19zMu._bMWAJ th {
 	padding: 2em 0;
 }
-.p-datepicker-touch-ui.p-datepicker td {
+._19zMu._bMWAJ td {
 	padding: 0;
 }
-.p-datepicker-touch-ui.p-datepicker td span,
-.p-datepicker-touch-ui.p-datepicker td a {
+._19zMu._bMWAJ td span,
+._19zMu._bMWAJ td a {
 	padding: 2em 0;
 }
 
-.p-datepicker-touch-ui .p-timepicker {
+._19zMu ._2t68- {
     padding: 1em 0;
 }
 
-.p-datepicker-touch-ui .p-timepicker > div a {
+._19zMu ._2t68- > div a {
     font-size: 2em;
 }
 
-.p-datepicker-mask {
+._1HGaX {
     position: fixed;
     width: 100%;
     height: 100%;
 }
 
 @media screen and (max-width: 40em) {
-    .p-datepicker-multiple-month {
+    ._BT3iS {
         width: 17em;
         overflow: auto;
     }
 
-    .p-datepicker-touch-ui.p-datepicker th {
+    ._19zMu._bMWAJ th {
         padding: 1em 0;
     }
 
-    .p-datepicker-touch-ui.p-datepicker td span,
-    .p-datepicker-touch-ui.p-datepicker td a {
+    ._19zMu._bMWAJ td span,
+    ._19zMu._bMWAJ td a {
         padding: 1em 0;
     }
 }
